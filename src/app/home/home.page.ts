@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
 import { DadosService } from '../servicos/dados.service';
+import { Router } from '@angular/router';
+import { IPokemon } from '../Interfaces/iPokemon';
 
-export interface IPokemon{
-  numero: string;
-  nome: string;
-  tipos: string[];
-  img: string;
-}
 
 @Component({
   selector: 'app-home',
@@ -32,13 +28,16 @@ export class HomePage {
 
   public listaFiltrada = [];
 
-  constructor(dadosService: DadosService) {
+  constructor(public dadosService: DadosService, public router: Router) {
 
     this.resetarLista();
   }
 
   abrirDadosPokemon(pokemon: IPokemon){
-    console.log(pokemon);
+    //SalVA OS DADOS DO POKEMON NO DB VIRTUAL
+    this.dadosService.setDados('dadosPokemon', pokemon);
+    //Abre a pagina para exibir os dados
+    this.router.navigateByUrl('/dados-pokemon')
   }
   private resetarLista(){
   this.listaFiltrada = this.listaPokemons;
