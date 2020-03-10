@@ -60,25 +60,41 @@ export class HomePage {
       let listaApi = dados['results'];
 
       for (let item of listaApi){
-        this.pokeApi.buscaPokemonUrl(item.url).subscribe(dado=> {
+        this.pokeApi.buscaPokemonUrl(item.url).subscribe(dadosPokemon=> {
           //Adiciona os dados do pokemon na lista
-          this.listaPokemonApi.push(dado);
+          this.listaPokemonApi.push(dadosPokemon);
 
+          //atualiza a lista filtrada com os pokémons buscados
+        this.resetarLista();
         });
       }
-      //atualiza a lista filtrada com os pokémons buscados
-      this.resetarLista();
+      
     })
   }
   abrirDadosPokemon(pokemon: IPokemon){
     //SalVA OS DADOS DO POKEMON NO DB VIRTUAL
     this.dadosService.setDados('dadosPokemon', pokemon);
+
     //Abre a pagina para exibir os dados
     this.router.navigateByUrl('/dados-pokemon')
   }
 
   private resetarLista(){
   //this.listaFiltrada = this.listaPokemons;
+
+
+
+  //ordenar a lista dos pokemons pelo id
+  this.listaPokemonApi.sort(function (a, b) {
+    if (a.id > b.id) {
+      return 1;
+    }
+    if (a.id < b.id) {
+      return -1;
+    }
+    // a must be equal to b
+    return 0;
+  });
 
 
   this.listaFiltrada = this.listaPokemonApi;
@@ -91,10 +107,10 @@ public buscarPokemon(evento: any)
   
   if(busca && busca.trim() !=''){
     this.listaFiltrada = this.listaFiltrada.filter(dados => {
-      if(dados.nome.toLowerCase().indexOf(busca.toLowerCase()) > -1){
+      if(dados.name.toLowerCase().indexOf(busca.toLowerCase()) > -1){
         return true;
       }
-      if(dados.numero.toLowerCase().indexOf(busca.toLowerCase()) > -1){
+      if(String (dados.id).toLowerCase().indexOf(busca.toLowerCase()) > -1){
         return true;}
 
 
